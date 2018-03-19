@@ -1,8 +1,9 @@
 package CreateJson;
 
 public class Person {
-	public Person(String firstName, String lastName, String country, String dateOfBirth, String gender) {
+	public Person(int id, String firstName, String lastName, String country, String dateOfBirth, String gender) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.country = country;
@@ -42,11 +43,20 @@ public class Person {
 		this.gender = gender;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private String firstName;
 	private String lastName;
 	private String country;
 	private String dateOfBirth;
 	private String gender;
+	private int id;
 	
 
 

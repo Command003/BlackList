@@ -38,9 +38,10 @@ public class createQuery {
 				String country1 = rs.getString("country");
 				String datebirth = rs.getString("dateofbirth");
 				String gender1 = rs.getString("gender");
+				int id = rs.getInt("idperson");
 				// if there is match with all field data then create new object person with found data and add it to a List.
 				if (firstname != null && lastname != null && country1 != null && datebirth != null) {
-					person.add(new Person(firstname, lastname, country1, datebirth, gender1));
+					person.add(new Person(id, firstname, lastname, country1, datebirth, gender1));
 				}
 			}
 			//if there was no matches using all fields, there will be an empty list. so we start searching only using firstname and name values
@@ -56,9 +57,10 @@ public class createQuery {
 						String country1 = rs.getString("country");
 						String datebirth = rs.getString("dateofbirth");
 						String gender1 = rs.getString("gender");
+						int id = rs.getInt("idperson");
 						// if there is match with all field data then create new object person with found data and add it to a List.
 						if (firstname != null && lastname != null) {
-							person.add(new Person(firstname, lastname, country1, datebirth, gender1));
+							person.add(new Person(id, firstname, lastname, country1, datebirth, gender1));
 						}
 					}
 				} 
@@ -74,9 +76,10 @@ public class createQuery {
 				String country1 = rs.getString("country");
 				String datebirth = rs.getString("dateofbirth");
 				String gender1 = rs.getString("gender");
+				int id = rs.getInt("idperson");
 				// if there is match with all field data then create new object person with found data and add it to a List.
 				if (firstname != null && lastname != null) {
-					person.add(new Person(firstname, lastname, country1, datebirth, gender1));
+					person.add(new Person(id, firstname, lastname, country1, datebirth, gender1));
 				}
 			}	
 		}
