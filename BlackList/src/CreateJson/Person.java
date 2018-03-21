@@ -4,6 +4,17 @@ public class Person {
 	
 
 	public Person(String firstname, String lastname, String wholename, String number, String gender, String country,
+			String city) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.wholename = wholename;
+		this.number = number;
+		this.gender = gender;
+		this.country = country;
+		this.city = city;
+	}
+	public Person(String firstname, String lastname, String wholename, String number, String gender, String country,
 			String city, String street, String index) {
 		super();
 		this.firstname = firstname;
@@ -16,6 +27,7 @@ public class Person {
 		this.street = street;
 		this.index = index;
 	}
+	
 	private String firstname;
 	private String lastname;
 	private String wholename;

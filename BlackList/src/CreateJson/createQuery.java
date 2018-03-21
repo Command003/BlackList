@@ -10,20 +10,10 @@ import java.util.List;
 
 public class createQuery {
 	protected Connection conn;
+
 	public List <Person> searchPerson (Person person) throws SQLException{
 		List <Person> person1 = new ArrayList<Person>();
 		List <Person> person2 = new ArrayList<Person>();
-		try {
-
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost/?autoReconnect=true&useSSL=false";
-			String user = "root";
-			String pass = "abcd1234";
-			conn = DriverManager.getConnection(url, user, pass);
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-
 		Statement stmt = null;
 		stmt = conn.createStatement();
 		if (person.getFirstname() != null && person.getLastname() != null || person.getWholename() != null) {
@@ -51,7 +41,6 @@ public class createQuery {
 				for (Person persons : person1){
 					if (persons.getNumber() == person.getNumber() || persons.getCountry() == person.getCountry() || persons.getGender() == person.getGender() )
 						person2.add(person);
-
 				}
 			}
 		}

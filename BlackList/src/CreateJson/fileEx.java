@@ -5,6 +5,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -12,12 +17,21 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
 public class fileEx extends JFrame {
+	List <Person> person1 = new ArrayList<Person>();
 
+	
 	private JPanel contentPane;
 	private JTextField fName;
 	private JTextField lName;
@@ -80,11 +94,13 @@ public class fileEx extends JFrame {
 		JRadioButton male = new JRadioButton("Male");
 		male.setBounds(53, 163, 62, 23);
 		contentPane.add(male);
+		male.setActionCommand("male");
+		
 		
 		JRadioButton female = new JRadioButton("Female");
 		female.setBounds(118, 163, 149, 23);
 		contentPane.add(female);
-		
+		female.setActionCommand("female");
 		wName = new JTextField();
 		wName.setColumns(10);
 		wName.setBounds(50, 121, 126, 19);
@@ -138,10 +154,46 @@ public class fileEx extends JFrame {
 			      String wholename = wName.getText();
 			      String country = country1.getText();
 			      String city = city1.getText();
-			      textArea.setText(firstname + lastname + wholename + country + city);
-			      
-			      // .... do some operation on value ...
+			      String pass = pNumber.getText();
+			      String gender = group.getSelection().getActionCommand();
+			      person1.add(new Person(firstname, lastname, wholename, pass, gender, country, city));
+			      try {
+					convertToJson(person1);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}});
-			   
 	}
+	public static void convertToJson(List <Person> personList) throws IOException{
+		File json = new File("src/test.json");
+		@SuppressWarnings("resource")
+		FileWriter writer = new FileWriter(json);
+		for (Person person : personList){
+		JSONObject obj = new JSONObject(); //creating of  JSON object
+		obj.put("firstname", person.getFirstname()); 
+		obj.put("lastname", person.getLastname());
+		obj.put("wholename", person.getWholename());
+		obj.put("number", person.getNumber());
+		obj.put("country", person.getCountry());
+		obj.put("city", person.getCity());
+		obj.put("street", person.getStreet());
+		obj.put("index", person.getIndex());
+		obj.put("gender", person.getGender());
+		writer.write(obj.toString()  + System.lineSeparator()); //writing to the json object
+		}
+		writer.flush();
+	}
+	public static List<Person> parseFromJson(File file) throws FileNotFoundException, IOException, ParseException{
+		JSONParser parser = new JSONParser();
+		List <Person> output = new ArrayList<Person>();
+		Object obj = parser.parse(new FileReader(file));
+        JSONObject jsonObject =  (JSONObject) obj;
+        output.add(new Person(jsonObject.get("firstname").toString(), jsonObject.get("lastname").toString(), jsonObject.get("wholename").toString(),
+        		jsonObject.get("number").toString(), jsonObject.get("gender").toString(), jsonObject.get("country").toString(), jsonObject.get("city").toString(),
+        		jsonObject.get("street").toString(), jsonObject.get("index").toString()));       
+        return output;
+	}
+	
+	
 }
