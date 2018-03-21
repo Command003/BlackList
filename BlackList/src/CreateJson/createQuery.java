@@ -10,12 +10,11 @@ import java.util.List;
 
 public class createQuery {
 	protected Connection conn;
-	List <Person> person = new ArrayList<Person>();
-	
-	//
-	public List <Person> searchPerson (String firstName, String lastName, String country, String dateOfBirth, String gender) throws SQLException{
+	public List <Person> searchPerson (Person person) throws SQLException{
+		List <Person> person1 = new ArrayList<Person>();
+		List <Person> person2 = new ArrayList<Person>();
 		try {
-			
+
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://localhost/?autoReconnect=true&useSSL=false";
 			String user = "root";
@@ -24,68 +23,42 @@ public class createQuery {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
+
 		Statement stmt = null;
 		stmt = conn.createStatement();
-		//if all fields are entered in a GUI/FX we first of all search for a person using all fields data
-		if (firstName != null && lastName != null && country != null && dateOfBirth !=null) {
-			String sql = "SELECT * FROM 'table' WHERE firstname Like '%" + firstName +
-					"%'AND lastname LIKE '" + lastName + "'AND country LIKE '" + country +
-					"'AND dateofbirth LIKE '" + dateOfBirth +"'AND gender LIKE '" + gender + "'";
+		if (person.getFirstname() != null && person.getLastname() != null || person.getWholename() != null) {
+			String sql = "SELECT * FROM 'table' "
+					+ "INNER JOIN 'table1'"
+					+ "ON  (table1.idinfo = table.idinfo)"
+					+ "INNER JOIN 'table2' ON (table2.idpassport = table1.idpassport)"
+					+ "WHERE firstname Like '%" + person.getFirstname() +
+					"%'AND lastname LIKE '%" + person.getLastname() + 
+					"%'OR wholeName LIKE '" + person.getWholename() + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String firstname = rs.getString("firstname");
 				String lastname = rs.getString("lastname");
+				String wholename = rs.getString("wholename");
 				String country1 = rs.getString("country");
-				String datebirth = rs.getString("dateofbirth");
+				String index = rs.getString("index");
 				String gender1 = rs.getString("gender");
-				int id = rs.getInt("idperson");
-				// if there is match with all field data then create new object person with found data and add it to a List.
-				if (firstname != null && lastname != null && country1 != null && datebirth != null) {
-					person.add(new Person(id, firstname, lastname, country1, datebirth, gender1));
+				String city = rs.getString("city");
+				String number = rs.getString("number");
+				String street = rs.getString("street");
+				person1.add(new Person(firstname, lastname, wholename, number, gender1, country1, city , street, index));
+			}
+			if (person1 != null){
+				for (Person persons : person1){
+					if (persons.getNumber() == person.getNumber() || persons.getCountry() == person.getCountry() || persons.getGender() == person.getGender() )
+						person2.add(person);
+
 				}
 			}
-			//if there was no matches using all fields, there will be an empty list. so we start searching only using firstname and name values
-			if (person == null) {
-				stmt = conn.createStatement();
-				if (firstName != null && lastName != null) {
-					sql = "SELECT * FROM 'table' WHERE firstname Like '%" + firstName +
-							"%'AND lastname LIKE '" + lastName +"'AND gender LIKE '" + gender + "'";
-					rs = stmt.executeQuery(sql);
-					while(rs.next()){
-						String firstname = rs.getString("firstname");
-						String lastname = rs.getString("lastname");
-						String country1 = rs.getString("country");
-						String datebirth = rs.getString("dateofbirth");
-						String gender1 = rs.getString("gender");
-						int id = rs.getInt("idperson");
-						// if there is match with all field data then create new object person with found data and add it to a List.
-						if (firstname != null && lastname != null) {
-							person.add(new Person(id, firstname, lastname, country1, datebirth, gender1));
-						}
-					}
-				} 
-			} 
-			//if was entered only surname and name, so  we search for a person using only two fields
-		}else if (firstName != null && lastName != null) {
-			String sql = "SELECT * FROM 'table' WHERE firstname Like '%" + firstName +
-					"%'AND lastname LIKE '" + lastName +"'AND gender LIKE '" + gender + "'";
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()){
-				String firstname = rs.getString("firstname");
-				String lastname = rs.getString("lastname");
-				String country1 = rs.getString("country");
-				String datebirth = rs.getString("dateofbirth");
-				String gender1 = rs.getString("gender");
-				int id = rs.getInt("idperson");
-				// if there is match with all field data then create new object person with found data and add it to a List.
-				if (firstname != null && lastname != null) {
-					person.add(new Person(id, firstname, lastname, country1, datebirth, gender1));
-				}
-			}	
 		}
-		//set result true/false for necessary field e.g. setValue(true/false) and send it to GUI/FX form
-		// saving to JSON file method shall be inserted
-		return person;	
+		if (person2.size() >= 1)
+			return person2;
+		else
+			return person1;	
 	}
 }
 
