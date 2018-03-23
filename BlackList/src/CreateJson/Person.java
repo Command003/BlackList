@@ -3,7 +3,6 @@ package CreateJson;
 public class Person {
 	public Person(){};
 	
-
 	@Override
 	public String toString() {
 		return "firstname=" + firstname + ", lastname=" + lastname + ", wholename="
@@ -11,11 +10,6 @@ public class Person {
 				+ country + ", city=" + city + ", street=" + street + ", index=" + index;
 	}
 
-//	public String toString1() {
-//		return "firstname=" + firstname + ",n lastname=" + lastname + ",%n wholename="
-//				+ wholename  + ", number=" + number + ", gender=" + gender + ", country="
-//				+ country + ", city=" + city + ", street=" + street + ", index=" + index;
-//	}
 	public Person(String firstname, String lastname, String wholename, String number, String gender, String country,
 			String city) {
 		super();

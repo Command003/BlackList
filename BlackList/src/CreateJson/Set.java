@@ -4,44 +4,27 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
-
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.omg.PortableServer.ServantRetentionPolicyValue;
-
 import java.awt.Color;
-import java.awt.Button;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.awt.Font;
-import java.awt.TextField;
-
 
 public class Set 
 
@@ -101,10 +84,10 @@ public class Set
     	mainForm.getContentPane().add(surnName);
     	surnName.setColumns(10);
     	
-    	result = new JTextField();
-    	result.setBounds(37, 339, 275, 19);
-    	mainForm.getContentPane().add(result);
-    	result.setColumns(10);
+//    	result = new JTextField();
+//    	result.setBounds(37, 339, 275, 19);
+//    	mainForm.getContentPane().add(result);
+//    	result.setColumns(10);
     	
     	JButton btnButton = new JButton("Search");
     	btnButton.setBounds(210, 275, 117, 41);
@@ -113,8 +96,6 @@ public class Set
     	JLabel lblInputName = new JLabel("Name ");
     	lblInputName.setBounds(92, 25, 58, 15);
     	mainForm.getContentPane().add(lblInputName);
-    	
-    	
     	
     	JLabel lblInputSurname = new JLabel("Surname ");
     	lblInputSurname.setBounds(90, 118, 80, 15);
@@ -170,22 +151,29 @@ public class Set
     	mainForm.setTitle("Black List");
     	mainForm.setVisible(true);
     	btnButton.addActionListener(e -> {
-				// TODO Auto-generated method stub
 			firstname = firstName.getText();
 			secondname = surnName.getText();
 			passport = passPort.getText();
 			city = gorod.getText();
 			country = strana.getText();
 			street = ulica.getText();
-			
 			if((firstName.getText().trim().length() <= 0 ) || (surnName.getText().trim().length() <= 0 )){
 		        jop.showMessageDialog(null, "Error : Fill name and surname", "ERROR", jop.ERROR_MESSAGE); 
 		        mainForm.setVisible(true);
 		        }else{
 		        	try {
+		        		set();
 		        		createQuery c = new createQuery();
-						File file = new File("src/test.json");
+						File file = new File("/home/student/workspace/BlackList/src/test.json");
+						GUI_Return_Form grf=new GUI_Return_Form();
+						if (c.searchPerson(parseFromJson(file)).size() >=1 ) {
 						convertToJson1(c.searchPerson(parseFromJson(file)));
+						  grf.initialize();
+						} else {
+							grf.nulllist();
+						}
+				          mainForm.setVisible(false);
+				          
 							
 					} catch (SQLException | IOException | ParseException e1) {
 						// TODO Auto-generated catch block
@@ -194,59 +182,27 @@ public class Set
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-		          mainForm.setVisible(false);
-		        
-		          GUI_Return_Form grf=new GUI_Return_Form();
-		          try {
-					grf.initialize();
-				} catch (IOException | ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		          
-		          
+		         
 		        }
 				firstName.setText("");
 				surnName.setText("");
 				passPort.setText("");
 				gorod.setText("");
 				strana.setText("");
-				ulica.setText("");
-				
-				result.setText(firstname + " " + secondname + " " + passport + " " + city + " " + country + " " +street);
-				//mainForm.setVisible(false);
-				
-				//GUI_Return_Form grf=new GUI_Return_Form();
-				//grf.initialize();
-				
-				
-				/*	mainForm.setVisible(false);
-				JFrame AA = new JFrame();
-				AA.setTitle("Temp");
-		    	AA.setBounds(150, 150, 400, 400);
-		    	AA.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		    	AA.getContentPane().setLayout(null);
-		    	AA.setVisible(true);
-				*/
-			
-		
-    		
+				ulica.setText("");	
 		});
     
 	exitItem.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				System.exit(0);
 			}
-			
 		});
     
 	}
 	
 	public void set() throws IOException{
 		List <Person> setArray = new ArrayList<Person>();
-		setArray.add(new Person(firstname, secondname, "", passport , city, country, street));
+		setArray.add(new Person(firstname, secondname, "", passport, "", country, street, city, ""));
 		convertToJson(setArray);
 	}
 	static class showabout implements ActionListener
@@ -263,27 +219,20 @@ public class Set
         	aboutForm.getContentPane().setLayout(null);
         	aboutForm.setVisible(true);
         }
-        
-      
     }
-	
-	 
     public static void main( String[] args )
     {
     	
     	Set r =new Set();
     	r.Creation();
-    	
-    	
-    	
-    	//System.out.println();
     }
     public static void convertToJson(List <Person> personList) throws IOException{
-		File json = new File("src/test.json");
+		File json = new File("/home/student/workspace/BlackList/src/test.json");
 		@SuppressWarnings("resource")
-		FileWriter writer = new FileWriter(json);
+		FileWriter writer = new FileWriter(json, false);
 		for (Person person : personList){
-		JSONObject obj = new JSONObject(); //creating of  JSON object
+		JSONObject obj = new JSONObject();
+		
 		obj.put("firstname", person.getFirstname()); 
 		obj.put("lastname", person.getLastname());
 		obj.put("wholename", person.getWholename());
@@ -297,10 +246,11 @@ public class Set
 		}
 		writer.flush();
 	}
-    public static void convertToJson1(List <Person> personList) throws IOException{
-		File json = new File("src/test1.json");
+    @SuppressWarnings("unchecked")
+	public static void convertToJson1(List <Person> personList) throws IOException{
+		File json = new File("/home/student/workspace/BlackList/src/test1.json");
 		@SuppressWarnings("resource")
-		FileWriter writer = new FileWriter(json);
+		FileWriter writer = new FileWriter(json, false);
 		JSONObject out = new JSONObject();
 		JSONArray fname = new JSONArray();
 		JSONArray lname = new JSONArray();
@@ -313,8 +263,6 @@ public class Set
 		JSONArray index = new JSONArray();
 		int i = 1;
 		for (Person person : personList){
-		 //creating of  JSON object
-			
 			fname.add(i+") " + person.getFirstname());
 			lname.add(i+") " +  person.getLastname());
 			wname.add(i+") " + person.getWholename());
@@ -325,16 +273,6 @@ public class Set
 			index.add(i+") " + person.getIndex());
 			street.add(i+") " + person.getStreet());
 			i++;
-//		obj.add("firstname", person.getFirstname()); 
-//		obj.put("lastname", person.getLastname());
-//		obj.put("wholename", person.getWholename());
-//		obj.put("number", person.getNumber());
-//		obj.put("country", person.getCountry());
-//		obj.put("city", person.getCity());
-//		obj.put("street", person.getStreet());
-//		obj.put("index", person.getIndex());
-//		obj.put("gender", person.getGender());
-		 //writing to the json object
 		}
 		out.put("firstname",fname);
 		out.put("lastname",lname);

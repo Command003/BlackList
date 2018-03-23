@@ -40,6 +40,7 @@ public class createQuery {
 				String city = rs.getString("city");
 				String number = rs.getString("number");
 				String street = rs.getString("street");
+				if (firstname != null && lastname != null && wholename != null)
 				person1.add(new Person(firstname, lastname, wholename, number, gender1, country1, city , street, index));
 			}
 			if (person1 != null){

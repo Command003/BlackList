@@ -12,41 +12,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JMenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-
 import org.json.simple.parser.ParseException;
-
 import javax.swing.JMenu;
 import javax.swing.JList;
-import java.awt.Toolkit;
-
 public class GUI_Return_Form {
 	private static JFrame form;
+	@SuppressWarnings("rawtypes")
 	private static JList list;
 	private static Set s = new Set();
 	static class savetxt implements ActionListener
     {
-        public void actionPerformed(ActionEvent e)
+        @SuppressWarnings("static-access")
+		public void actionPerformed(ActionEvent e)
         
         {
-        	File file = new File("src/test1.json");
+        	File file = new File("/home/student/workspace/BlackList/src/test1.json");
     		String[] array;
-
-//  		  alist.add("Ravi");
-//  		  alist.add("Vijay");  
-//  		  alist.add("Ravi");  
-//  		  alist.add("Ajay");
-//  		  alist.add("Ejay");
-        	/*String[] array;
-  		 array = (String[])  s.getRezult().toArray();*/
-  		          
       JFileChooser chooser = new JFileChooser();
   			int retrival = chooser.showSaveDialog(null);
   			if (retrival == JFileChooser.APPROVE_OPTION)    
@@ -55,7 +40,6 @@ public class GUI_Return_Form {
   			array = new String [s.parseFromJson(file).size()];
   			for(Person person : s.parseFromJson(file)){
   				array[i] = person.toString();
-  				
   				i++;
   			}
   			BufferedWriter bw = new BufferedWriter(new FileWriter(chooser.getSelectedFile()+".txt"));
@@ -68,54 +52,35 @@ public class GUI_Return_Form {
           System.err.println("An IOException was caught!");
           ex.printStackTrace();
 	  } catch (ParseException e1) {
-		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
   		
         }
     }
+	public void nulllist(){
+		String[] arr=new String[1];
+		arr [0] = "FALSE";
+		form=new JFrame();//Form
+		form.setBounds(100, 100, 249, 325);
+		form.setTitle("Result Form");
+		form.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		form.getContentPane().setLayout(null);
+		list = new JList(arr);
+		list.setBounds(10, 62, 218, 180);
+		form.getContentPane().add(list);
+		form.setVisible(true);
+		list.setVisible(true);
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
-	public void initialize() throws FileNotFoundException, IOException, ParseException{
-		
-		File file = new File("src/test1.json");
+	public void initialize() throws FileNotFoundException, IOException, ParseException{	
+		File file = new File("/home/student/workspace/BlackList/src/test1.json");
 		int i = 0;
 		String[] array = new String [s.parseFromJson(file).size()];
 		for(Person person : s.parseFromJson(file)){
 			array[i] = person.toString();
-			
 			i++;
 		}
-	
-		
-    	
- 		 //array = (String[]) alist.toArray();
-    	
-    	//list = new JList(array);
-//		ArrayList<String> alist=new ArrayList<String>();
-//		  alist.add("Ravi");
-//		  alist.add("Vijay");  
-//		  alist.add("Ravi");  
-//		  alist.add("Ajay");  
-//		  alist.add("Ajay1");
-//		  alist.add("Ajay2");
-//		  alist.add("Ajay3");
-//		  alist.add("Ajay4");
-//		  alist.add("Ajay5");
-//		  alist.add("Ajay7");
-//		  alist.add("Ajay8");
-//		  alist.add("Ajay9");
-//		  alist.add("Ajay99");
-//		  alist.add("Ajay11");
-//		  alist.add("Ajay22");
-//		  String[] array = alist.toArray(new String[0]);
-		/*ArrayList<String> alist=new ArrayList<String>();
-   	 alist.add("Ravi");
-	  alist.add("Vijay");  
-	  alist.add("Ravi");  
-	  alist.add("Ajay");
-	  alist.add("Ejay");
-	  String[] array=alist.toArray(new String[0]);*/
-		 
 		form=new JFrame();//Form
 		form.setBounds(100, 100, 249, 325);
 		form.setTitle("Result Form");
@@ -162,19 +127,13 @@ public class GUI_Return_Form {
 		backItem.addActionListener(new btmf());
 		form.setVisible(true);
 	}
-	
-	
-	
-	
 	static class btmf implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
         	form.setVisible(false);
         	Set s=new Set();
-        	
         	s.Creation();
-        	
         }
     }
 	
@@ -193,7 +152,6 @@ public class GUI_Return_Form {
         	aboutForm.setVisible(true);
         }
     }
-	
 	static class exit implements ActionListener
 	    {
 	        public void actionPerformed(ActionEvent e)
@@ -201,12 +159,8 @@ public class GUI_Return_Form {
 	            System.exit(0);
 	        }
 	    }
-	
 	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
 		GUI_Return_Form grf=new GUI_Return_Form();
-		grf.initialize();
-		
-		
-		
+		grf.initialize();	
 	}
 }
