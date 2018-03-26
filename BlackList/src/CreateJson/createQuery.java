@@ -64,7 +64,7 @@ public class createQuery {
 					+ "INNER JOIN SDN.location ON SDN.person.idperson = SDN.location.idlocation)"
 					+ "INNER JOIN SDN.info ON SDN.person.idperson = SDN.info.idinfo)"
 					+ "WHERE firstname Like '%" + person.getPar1() +
-					"%'AND lastname LIKE '%" + person.getPar2() +"'";
+					"%'AND lastname LIKE '%" + person.getPar2() +"%'";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String firstname = rs.getString("firstname");
@@ -100,7 +100,7 @@ public class createQuery {
 					+ "INNER JOIN databaseunsecuritysanctionslist.location ON databaseunsecuritysanctionslist.person.idperson = databaseunsecuritysanctionslist.location.idlocation)"
 					+ "INNER JOIN databaseunsecuritysanctionslist.info ON databaseunsecuritysanctionslist.person.idperson = databaseunsecuritysanctionslist.info.idinfo)"
 					+ "WHERE FIRSTNAME Like '%" + person.getPar1() +
-					"%'AND LASTNAME LIKE '%" + person.getPar2() +"'";
+					"%'AND LASTNAME LIKE '%" + person.getPar2() +"%'";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()){
 				String firstname = rs.getString("FIRSTNAME");

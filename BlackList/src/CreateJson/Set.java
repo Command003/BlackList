@@ -11,6 +11,12 @@ import javax.swing.JOptionPane;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Document;
+import DataBase.*;
+import XmlParse.DataOfXml;
+import XmlParse.DocumentBuild;
+import XmlParse.ResurseXml;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -54,25 +60,24 @@ public class Set
 	@SuppressWarnings({ "static-access", "unchecked", "rawtypes" })
 	protected void Creation(){
 		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
 		} catch (Exception e) {
-		  
+
 		}
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		    if ("Nimbus".equals(info.getName())) {
-		        try {
+			if ("Nimbus".equals(info.getName())) {
+				try {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		        break;
-		    }
+				break;
+			}
 		}
 
 		JFrame mainForm = new JFrame();
@@ -130,7 +135,7 @@ public class Set
 		gorod.setColumns(10);
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[]
-				{"Blacklist1", "Blacklist2", "Blacklist3"}));
+				{"SDN Database", "Blacklist2", "Blacklist3"}));
 		comboBox.setBounds(55, 328, 400, 24);
 		mainForm.getContentPane().add(comboBox);
 		JButton selectDB = new JButton("SELECT");
@@ -169,10 +174,10 @@ public class Set
 		mainForm.getContentPane().add(lblNewLabel_1);
 		mainForm.setTitle("Black List");
 		mainForm.setVisible(true);
-    	selectDB.setBounds(210, 364, 117, 45);
-    	mainForm.getContentPane().add(selectDB);
-    	mainForm.setTitle("Black List");
-    	mainForm.setVisible(true);
+		selectDB.setBounds(210, 364, 117, 45);
+		mainForm.getContentPane().add(selectDB);
+		mainForm.setTitle("Black List");
+		mainForm.setVisible(true);
 		String [] link = {"http://ec.europa.eu/external_relations/cfsp/sanctions/list/version4/global/global.xml",
 				"https://scsanctions.un.org/al-qaida/",
 				"https://www.treasury.gov/ofac/downloads/sdn.xml","/home/student/NewFiles/"};
@@ -182,11 +187,19 @@ public class Set
 			if(selectDB !=null){
 				try {
 					d.downloadFile(link[bln],link[3]);
-					
+					ResurseXml.initList();
+					DocumentBuild documentBuild = new DocumentBuild();
+					Document doc = documentBuild.createDocument();
+					DataOfXml dataOfX = new DataOfXml();
+					dataOfX.parseXML(doc);
+					DBConnection db = new DBConnection();
+					db.TableModel();
+
 				} catch (IOException e1) {
 					jop.showMessageDialog(null, "Internet not conneced!", "ERROR", jop.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
+
 			}
 
 
