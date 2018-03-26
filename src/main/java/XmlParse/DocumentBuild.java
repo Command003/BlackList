@@ -1,6 +1,3 @@
-/**
- * 
- */
 package XmlParse;
 
 import java.io.File;
@@ -20,25 +17,28 @@ import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.ArrayIndexOutOfBoundsException;
 
-public class DocumentBuild {
-      private Document doc;
-    // Строим объектную модель исходного XML файла
-    String as = "/home/student/workspace003/BlackList/src/main/java/XmlParse/data.xml";
 
-       public  Document createDocument() {
-           try
-           {
-               DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-               DocumentBuilder db = dbf.newDocumentBuilder();
-                doc = db.parse(as);
+public class DocumentBuild {  private Document doc;
+// Строим объектную модель исходного XML файла
+String as = ResurseXml.ph;
 
-               // Выполнять нормализацию не обязательно, но рекомендуется
-              // doc.getDocumentElement().normalize();
+public  Document createDocument() {
 
-           } catch (ParserConfigurationException e){System.out.println("Cannot parse file."); System.exit(1);}
-           catch(SAXException e){System.out.println("Cannot parse file."); System.exit(1);}
-           catch(java.io.IOException ex){System.out.println("Cannot read input file."); System.exit(1);                   
-           }finally {return  doc;}
-                   
-           }
-       }
+
+    try
+    {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        doc = db.parse(as);
+
+        // Выполнять нормализацию не обязательно, но рекомендуется
+        // doc.getDocumentElement().normalize();
+
+    } catch (ParserConfigurationException e){System.out.println("Cannot parse file."); System.exit(1);}
+    catch(SAXException e){System.out.println("Cannot parse file."); System.exit(1);}
+    catch(java.io.IOException ex){System.out.println("Cannot read input file."); System.exit(1);
+    }finally {return  doc;}
+
+}
+
+}
