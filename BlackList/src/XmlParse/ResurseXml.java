@@ -35,6 +35,7 @@ public class ResurseXml {
 			list.add("LANGUAGE");
 			list.add("COUNTRY");
 			list.add("PLACE");
+			list.add("GENDER");
 		}
 	}
 }

@@ -1,18 +1,19 @@
 package DataBase;
 
 import XmlParse.*;
-import org.apache.log4j.Logger;
 import java.sql.*;
+import org.apache.log4j.Logger;
 
-public class DBConnection {
+public class UNSecuritySanctionList {
 
 	public static Connection connection;
-	private static Logger logger = Logger.getLogger(DBConnection.class.getName());
+	private static Logger logger = Logger.getLogger(UNSecuritySanctionList.class.getName());
+
 	public  void tableModel() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/SDN?autoReconnect=true&useSSL=false&serverTimezone=UTC",
+					"jdbc:mysql://localhost:3306/databaseunsecuritysanctionslist?autoReconnect=true&useSSL=false&serverTimezone=UTC",
 					"root",
 					"abcd1234");
 			connection.setAutoCommit(true);
@@ -22,24 +23,31 @@ public class DBConnection {
 		}
 		try {
 			Statement statement = connection.createStatement();
+
 			statement.executeUpdate(
-					"DELETE FROM SDN.person;"
+					"DELETE FROM databaseunsecuritysanctionslist.person;"
 					);
+
 			statement.executeUpdate(
-					"ALTER TABLE SDN.person AUTO_INCREMENT = 1;"
+					"ALTER TABLE databaseunsecuritysanctionslist.person AUTO_INCREMENT = 1;"
 					);
+
 			statement.executeUpdate(
-					"DELETE FROM SDN.location;"
+					"DELETE FROM databaseunsecuritysanctionslist.location;"
 					);
+
 			statement.executeUpdate(
-					"ALTER TABLE SDN.location AUTO_INCREMENT = 1;"
+					"ALTER TABLE databaseunsecuritysanctionslist.location AUTO_INCREMENT = 1;"
 					);
+
 			statement.executeUpdate(
-					"DELETE FROM SDN.info;"
+					"DELETE FROM databaseunsecuritysanctionslist.info;"
 					);
+
 			statement.executeUpdate(
-					"ALTER TABLE SDN.info AUTO_INCREMENT = 1;"
+					"ALTER TABLE databaseunsecuritysanctionslist.info AUTO_INCREMENT = 1;"
 					);
+
 		} catch (SQLException e) {
 			logger.error(e);
 		}
@@ -48,28 +56,28 @@ public class DBConnection {
 			try {
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(
-						"INSERT INTO SDN.person " +
-								"(firstname, lastname) " +
+						"INSERT INTO databaseunsecuritysanctionslist.person " +
+								"(FIRSTNAME, LASTNAME, MIDDLENAME, WHOLENAME) " +
 								"VALUES ('"
-								+ arr[0].replace("'","").replace(",","") + "','"
-								+ arr[1].replace("'","").replace(",","") + "'); "
+								+ arr[0].replace("'","").replace(",","") + "', '"
+								+ arr[1].replace("'","").replace(",","") + "', '"
+								+ arr[2].replace("'","").replace(",","") + "', '"
+								+ arr[3].replace("'","").replace(",","") + "'); "
 						);
 				statement.executeUpdate(
-						"INSERT INTO SDN.location " +
-								"(city, country, adress1) " +
+						"INSERT INTO databaseunsecuritysanctionslist.location " +
+								"(COUNTRY, PLACE) " +
 								"VALUES ('"
 								+ arr[7].replace("'","").replace(",","") + "', '"
-								+ arr[8].replace("'","").replace(",","") + "', '"
-								+ arr[9].replace("'","").replace(",","") + "'); "
+								+ arr[4].replace("'","").replace(",","") + "'); "
 						);
 				statement.executeUpdate(
-						"INSERT INTO SDN.info " +
-								"(category, sdnType, remarks, program, dateOfBirth) " +
+						"INSERT INTO databaseunsecuritysanctionslist.info " +
+								"(FUNCTION, GENDER, DATE, LANGUAGE) " +
 								"VALUES ('"
-								+ arr[2].replace("'","").replace(",","") + "', '"
-								+ arr[3].replace("'","").replace(",","") + "', '"
-								+ arr[4].replace("'","").replace(",","") + "', '"
 								+ arr[5].replace("'","").replace(",","") + "', '"
+								+ arr[9].replace("'","").replace(",","") + "', '"
+								+ arr[8].replace("'","").replace(",","") + "', '"
 								+ arr[6].replace("'","").replace(",","") + "'); "
 						);
 			} catch (Exception e) {
@@ -86,3 +94,5 @@ public class DBConnection {
 		}
 	}
 }
+
+
