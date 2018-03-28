@@ -34,14 +34,13 @@ import javax.swing.JList;
 public class GUI_Return_Form {
 	private static JFrame form;
 	@SuppressWarnings("rawtypes")
-	private static JList list;
+	private static JList list = new JList();
 	private static Set s = new Set();
-	static File file = new File("/home/student/workspace/BlackList/src/test.json");
-	static class savetxt implements ActionListener
+	private static File file = new File("/home/student/workspace/BlackList/src/test.json");
+	private static class savetxt implements ActionListener
 	
     {
-        @SuppressWarnings("static-access")
-		public void actionPerformed(ActionEvent e)
+        public void actionPerformed(ActionEvent e)
         {
     		String[] array;
     		JFileChooser chooser = new JFileChooser();
@@ -50,8 +49,8 @@ public class GUI_Return_Form {
   			if (retrival == JFileChooser.APPROVE_OPTION)    
   		try{
   			int i = 0;
-  			array = new String [s.parseFromJson(file).size() + 1];
-  			for(Person person : c.searchPerson(s.parseFromJson(file))){
+  			array = new String [Set.parseFromJson(file).size() + 1];
+  			for(Person person : c.searchPerson(Set.parseFromJson(file))){
   				array[i] = person.toString();
   				i++;
   			}
@@ -76,7 +75,7 @@ public class GUI_Return_Form {
     }
 	public void nulllist(){
 		String[] arr=new String[1];
-		arr [0] = "FALSE";
+		arr [0] = "No match found";
 		form=new JFrame();//Form
 		form.setBounds(100, 100, 249, 325);
 		form.setTitle("Result");
@@ -86,6 +85,22 @@ public class GUI_Return_Form {
 		list = new JList(arr);
 		list.setBounds(10, 62, 218, 180);
 		form.getContentPane().add(list);
+		JMenuBar menuBar = new JMenuBar();//Menu
+		JMenu menu1 = new JMenu("Action");
+		menuBar.add(menu1);
+		menuBar.setBounds(0, 0, 531, 21);
+		form.getContentPane().add(menuBar);
+		JMenuItem exitItem = new JMenuItem("Exit");//Menu Items
+		JMenuItem aboutItem = new JMenuItem("About");
+		JMenuItem backItem=new JMenuItem("Back");
+		JMenu menuHelp = new JMenu("Help");
+		menuBar.add(menuHelp);
+		menuHelp.add(aboutItem);
+        menu1.add(backItem);
+        menu1.add(exitItem);
+		aboutItem.addActionListener(new Showabout());
+		exitItem.addActionListener(new Exit());
+		backItem.addActionListener(new Btmf());
 		form.setVisible(true);
 		list.setVisible(true);
 	}
@@ -94,9 +109,9 @@ public class GUI_Return_Form {
 	public void initialize() throws FileNotFoundException, IOException, ParseException, ClassNotFoundException, SQLException{	
 		createQuery c = new createQuery();
 		int i = 0;
-		String[] array = new String [s.parseFromJson(file).size() + 1];
-		for(Person person : c.searchPerson(s.parseFromJson(file))){
-			array[i] = person.toString();
+		String[] array = new String [c.searchPerson(Set.parseFromJson(file)).size()];
+		for(Person person : c.searchPerson(Set.parseFromJson(file))){
+			array[i] = person.toString().replace("[", "").replaceAll("]", "");
 			i++;
 		}
 		form=new JFrame();//Form
@@ -130,7 +145,6 @@ public class GUI_Return_Form {
 		form.getContentPane().add(lblNewLabel);
 		list = new JList(array);
 		list.setBounds(10, 62, 218, 180);
-		//form.getContentPane().add(list);
 		DefaultListSelectionModel m = new DefaultListSelectionModel();
 	    m.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    m.setLeadAnchorNotificationEnabled(false);
@@ -141,12 +155,12 @@ public class GUI_Return_Form {
 		form.getContentPane().add(scrollPane);
 		
 		savetoButton.addActionListener(new savetxt());
-		aboutItem.addActionListener(new showabout());
-		exitItem.addActionListener(new exit());
-		backItem.addActionListener(new btmf());
+		aboutItem.addActionListener(new Showabout());
+		exitItem.addActionListener(new Exit());
+		backItem.addActionListener(new Btmf());
 		form.setVisible(true);
 	}
-	static class btmf implements ActionListener
+	static class Btmf implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
@@ -156,7 +170,7 @@ public class GUI_Return_Form {
         }
     }
 	
-	static class showabout implements ActionListener
+	static class Showabout implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
@@ -194,9 +208,8 @@ public class GUI_Return_Form {
     		JButton schematicsButton = new JButton("Schematics");
     		schematicsButton.setBounds(280, 91, 117, 25);
     		aboutForm.getContentPane().add(schematicsButton);
-    		schematicsButton.addActionListener(new sch());
+    		schematicsButton.addActionListener(new Sch());
     		aboutForm.setVisible(true);
-
         }
     }
 
@@ -221,7 +234,6 @@ static class about implements ActionListener
         }
     }
 	
-
 static class openManual implements ActionListener
 {
     public void actionPerformed(ActionEvent e)
@@ -230,18 +242,13 @@ static class openManual implements ActionListener
 
           try {
               Desktop desktop = Desktop.getDesktop();
-
-              // Open a file using the default program for the file type. In the example 
-              // we will launch a default registered program to open a text file. For 
-              // example on Windows operating system this call might launch a notepad.exe 
-              // to open the file.
               desktop.open(file);
           } catch (IOException e1) {
               e1.printStackTrace();
           }
     }
 }
-static class sch implements ActionListener
+static class Sch implements ActionListener
 {
     public void actionPerformed(ActionEvent e)
     {
@@ -270,16 +277,14 @@ static class sch implements ActionListener
  		shm.setVisible(true);
     }
 }
-
-	
-	static class exit implements ActionListener
+	public static class Exit implements ActionListener
 	    {
 	        public void actionPerformed(ActionEvent e)
 	        {
 	            System.exit(0);
 	        }
 	    }
-	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException, ClassNotFoundException, SQLException {
+	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException, SQLException {
 		GUI_Return_Form grf=new GUI_Return_Form();
 		grf.initialize();	
 	}

@@ -8,15 +8,20 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
+
+import CreateJson.GUI_Return_Form.Sch;
+import CreateJson.GUI_Return_Form.about;
+import CreateJson.GUI_Return_Form.openManual;
 import DataBase.*;
 import XmlParse.DataOfXml;
 import XmlParse.DocumentBuild;
 import XmlParse.ResurseXml;
-
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -34,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Font;
 import java.awt.SystemColor;
+import javax.swing.JPanel;
+import java.awt.Toolkit;
 
 public class Set 
 
@@ -45,7 +52,6 @@ public class Set
 	String city = "";
 	String country = "";
 	String street = "";
-
 	private JTextField firstName;
 	private JTextField surnName;
 	private JTextField passPort;
@@ -56,43 +62,23 @@ public class Set
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboBox;
 	public int bln;
-
 	@SuppressWarnings({ "static-access", "unchecked", "rawtypes" })
 	protected void Creation(){
-		try {
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (Exception e) {
-
-		}
-		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			if ("Nimbus".equals(info.getName())) {
-				try {
-					UIManager.setLookAndFeel(info.getClassName());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				break;
-			}
-		}
 
 		JFrame mainForm = new JFrame();
+		mainForm.setIconImage(Toolkit.getDefaultToolkit().getImage(Set.class.getResource("/javax/swing/plaf/basic/icons/JavaCup16.png")));
 		mainForm.getContentPane().setBackground(SystemColor.inactiveCaption);
 		mainForm.setForeground(Color.GRAY);
 		mainForm.setFont(new Font("Dialog", Font.BOLD, 16));
-		mainForm.setBounds(150, 150, 511, 451);
+		mainForm.setBounds(150, 150, 530, 488);
 		mainForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainForm.getContentPane().setLayout(null);
 		JOptionPane jop = new JOptionPane();
+		mainForm.getContentPane().setLayout(null);
 
 		JMenuBar menuBar = new JMenuBar();//Menu
+		menuBar.setBounds(0, 0, 530, 21);
 		JMenu menu1 = new JMenu("Action");
 		menuBar.add(menu1);
-		menuBar.setBounds(0, 0, 509, 21);
 		mainForm.getContentPane().add(menuBar);
 
 		JMenuItem exitItem = new JMenuItem("Exit");//Menu Items
@@ -101,6 +87,7 @@ public class Set
 		menuBar.add(menuHelp);
 		menuHelp.add(aboutItem);
 		menu1.add(exitItem);
+		aboutItem.addActionListener(new showabout());
 
 		firstName = new JTextField("",20);
 		firstName.setBounds(55, 52, 146, 32);
@@ -134,12 +121,12 @@ public class Set
 		mainForm.getContentPane().add(gorod);
 		gorod.setColumns(10);
 		comboBox = new JComboBox();
+		comboBox.setBounds(67, 353, 400, 24);
 		comboBox.setModel(new DefaultComboBoxModel(new String[]
-				{"SDN Database", "Blacklist2", "Blacklist3"}));
-		comboBox.setBounds(55, 328, 400, 24);
+				{"SDN Database", "Al-Qaida database", "UN database"}));
 		mainForm.getContentPane().add(comboBox);
 		JButton selectDB = new JButton("SELECT");
-		selectDB.setBounds(210, 364, 117, 45);
+		selectDB.setBounds(210, 389, 117, 45);
 
 		JLabel lblCity = new JLabel("City ");
 		lblCity.setBounds(368, 118, 43, 15);
@@ -168,42 +155,50 @@ public class Set
 		mainForm.getContentPane().add(lblStreet);
 
 		JLabel lblNewLabel_1 = new JLabel("*");
+		lblNewLabel_1.setBounds(37, 153, 21, 15);
 		lblNewLabel_1.setForeground(Color.RED);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblNewLabel_1.setBounds(37, 153, 21, 15);
 		mainForm.getContentPane().add(lblNewLabel_1);
 		mainForm.setTitle("Black List");
 		mainForm.setVisible(true);
-		selectDB.setBounds(210, 364, 117, 45);
 		mainForm.getContentPane().add(selectDB);
+		
+		JLabel lblNewLabel = new JLabel("To update database select it once again");
+		lblNewLabel.setBounds(123, 328, 299, 15);
+		mainForm.getContentPane().add(lblNewLabel);
 		mainForm.setTitle("Black List");
 		mainForm.setVisible(true);
-		String [] link = {"http://ec.europa.eu/external_relations/cfsp/sanctions/list/version4/global/global.xml",
-				"https://scsanctions.un.org/al-qaida/",
-				"https://www.treasury.gov/ofac/downloads/sdn.xml","/home/student/NewFiles/"};
+		String [] link = {"https://www.treasury.gov/ofac/downloads/sdn.xml",
+				"https://cdn.rawgit.com/Command003/BlackList/df8242ff/alqaida.xml",
+				"http://ec.europa.eu/external_relations/cfsp/sanctions/list/version4/global/global.xml","/home/student/NewFiles/"};
 		selectDB.addActionListener(e -> {
 			Download d = new Download();
 			this.bln = comboBox.getSelectedIndex();
 			if(selectDB !=null){
 				try {
-					d.downloadFile(link[bln],link[3]);
-					ResurseXml.initList();
+					ResurseXml.initList(bln);
 					DocumentBuild documentBuild = new DocumentBuild();
-					Document doc = documentBuild.createDocument();
 					DataOfXml dataOfX = new DataOfXml();
-					dataOfX.parseXML(doc);
+					d.downloadFile(link[bln],link[3]);
 					DBConnection db = new DBConnection();
+					Document doc = documentBuild.createDocument(link[bln]);
+					dataOfX.parseXML(doc);
 					db.TableModel();
+					if (bln == 0){
+						db.TableModel();
+					} else if(bln == 1) {
+						dataOfX.parseXML(doc);
+						db.TableModel();
+					} else {
+						
+					}
 
 				} catch (IOException e1) {
-					jop.showMessageDialog(null, "Internet not conneced!", "ERROR", jop.ERROR_MESSAGE);
+					jop.showMessageDialog(null, "Internet not connected!", "ERROR", jop.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 
 			}
-
-
-			System.out.println(bln);
 		});
 		btnButton.addActionListener(e -> {
 			firstname = firstName.getText();
@@ -227,13 +222,9 @@ public class Set
 						grf.nulllist();
 					}
 					mainForm.setVisible(false);
-
-
 				} catch (SQLException | IOException | ParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -263,24 +254,50 @@ public class Set
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			
 			JFrame aboutForm=new JFrame();
-			aboutForm.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			aboutForm.setBounds(100, 100, 300, 300);
-			aboutForm.setTitle("About");
-			JLabel aboutlabel = new JLabel("Greeting!\nHere you will learn everithing about this app!");//Label
-			aboutlabel.setBounds(10, 10, 10, 300);
-			aboutForm.getContentPane().add(aboutlabel);
-			aboutForm.getContentPane().setLayout(null);
-			aboutForm.setVisible(true);
+        	aboutForm.getContentPane().setBackground(SystemColor.DARK_GRAY);
+        	aboutForm.setBackground(Color.DARK_GRAY);
+        	aboutForm.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        	aboutForm.setBounds(200, 200, 700, 154);
+        	aboutForm.setTitle("Help");
+        	JTextArea textArea = new JTextArea("Welcome to the BlackList application.Thank you for choosing our product.\nBlackList(BL) application allow to"
+    				+ " work with offline "
+        			+ "lists of banned individuals\nfrom different banks and countries.\n"
+        			+ "Free version of BL allow to keep and use three (3) different databases at a time.");
+    		textArea.setBounds(12, 12, 749, 76);	
+    		textArea.setFont(new Font("Serif",Font.ITALIC,15));
+    		textArea.setEnabled(false);
+        	aboutForm.getContentPane().add(textArea);
+        	
+        	
+        	textArea.setBackground(Color.DARK_GRAY);
+        	aboutForm.getContentPane().setLayout(null);
+        	JButton manualButton = new JButton("Manual");
+        	manualButton.setBounds(22, 91, 117, 25);
+    		aboutForm.getContentPane().add(manualButton);
+    		manualButton.addActionListener(new openManual());
+    		
+    		
+    		JButton aboutButton = new JButton("About");
+    		aboutButton.setBounds(151, 91, 117, 25);
+    		aboutForm.getContentPane().add(aboutButton);
+    		aboutButton.addActionListener(new about());
+    		
+    		JButton schematicsButton = new JButton("Schematics");
+    		schematicsButton.setBounds(280, 91, 117, 25);
+    		aboutForm.getContentPane().add(schematicsButton);
+    		schematicsButton.addActionListener(new Sch());
+    		aboutForm.setVisible(true);
 		}
 	}
 	public static void main( String[] args )
 	{
 
-		Set r =new Set();
+		Set r = new Set();
 		r.Creation();
 	}
-	public static void convertToJson(List <Person> personList) throws IOException{
+	public  void convertToJson(List <Person> personList) throws IOException{
 		File json = new File("/home/student/workspace/BlackList/src/test.json");
 		@SuppressWarnings("resource")
 		FileWriter writer = new FileWriter(json, false);
@@ -320,6 +337,4 @@ public class Set
 	public void setRezult(List<Person> rezult) {
 		this.rezult = rezult;
 	}
-
-
 }

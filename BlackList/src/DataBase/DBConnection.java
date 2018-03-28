@@ -71,8 +71,8 @@ public class DBConnection {
                         "INSERT INTO SDN.person " +
                                 "(firstname, lastname) " +
                                 "VALUES ('"
-                                + arr[0] + "', '"
-                                + arr[1] + "'); "
+                                + arr[0].replace("'","").replace(",","") + "','"
+                                + arr[1].replace("'","").replace(",","") + "'); "
                 );
 
                 statement.executeUpdate(
@@ -80,9 +80,9 @@ public class DBConnection {
                         "INSERT INTO SDN.location " +
                                 "(city, country, adress1) " +
                                 "VALUES ('"
-                                + arr[4] + "', '"
-                                + arr[3] + "', '"
-                                + arr[6] + "'); "
+                                + arr[4].replace("'","").replace(",","") + "', '"
+                                + arr[3].replace("'","").replace(",","") + "', '"
+                                + arr[6].replace("'","").replace(",","") + "'); "
                 );
 
                 statement.executeUpdate(
@@ -90,11 +90,11 @@ public class DBConnection {
                         "INSERT INTO SDN.info " +
                                 "(category, sdnType, remarks, program, dateOfBirth) " +
                                 "VALUES ('"
-                                + arr[2] + "', '"
-                                + arr[5] + "', '"
-                                + arr[7] + "', '"
-                                + arr[8] + "', '"
-                                + arr[9] + "'); "
+                                + arr[2].replace("'","").replace(",","") + "', '"
+                                + arr[5].replace("'","").replace(",","") + "', '"
+                                + arr[7].replace("'","").replace(",","") + "', '"
+                                + arr[8].replace("'","").replace(",","") + "', '"
+                                + arr[9].replace("'","").replace(",","") + "'); "
                 );
 
 
