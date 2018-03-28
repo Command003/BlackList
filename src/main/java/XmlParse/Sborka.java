@@ -1,7 +1,6 @@
 package XmlParse;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,7 +10,9 @@ import java.util.*;
 public class Sborka {
 	
 	public static void main(String[] args) {
-        ResurseXml.initList();
+  
+	
+	ResurseXml.initList();
       DocumentBuild  documentBuild =new DocumentBuild();
        Document doc = documentBuild.createDocument();
        DataOfXml dataOfX =new DataOfXml();

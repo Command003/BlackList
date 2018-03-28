@@ -18,7 +18,7 @@ static   List<String> elementvalue =new ArrayList<>();
 
 static   List<String> value;
 
- void parseXML(Document doc) {
+ public void parseXML(Document doc) {
 
         Element root = doc.getDocumentElement();
         System.out.println("корневой элемент" + " " + root.getNodeName());
@@ -81,7 +81,6 @@ static   List<String> value;
 
 
 }
-
 
 
 

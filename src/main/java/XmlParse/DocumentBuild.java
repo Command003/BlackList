@@ -19,7 +19,7 @@ import java.lang.ArrayIndexOutOfBoundsException;
 
 
 public class DocumentBuild {  private Document doc;
-// Строим объектную модель исходного XML файла
+// Building an object model of the source XML file
 String as = ResurseXml.ph;
 
 public  Document createDocument() {
@@ -31,8 +31,8 @@ public  Document createDocument() {
         DocumentBuilder db = dbf.newDocumentBuilder();
         doc = db.parse(as);
 
-        // Выполнять нормализацию не обязательно, но рекомендуется
-        // doc.getDocumentElement().normalize();
+        // It is not necessary to perform normalization, but it is recommended
+         doc.getDocumentElement().normalize();
 
     } catch (ParserConfigurationException e){System.out.println("Cannot parse file."); System.exit(1);}
     catch(SAXException e){System.out.println("Cannot parse file."); System.exit(1);}

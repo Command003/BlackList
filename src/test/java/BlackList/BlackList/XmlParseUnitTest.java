@@ -26,14 +26,12 @@ import XmlParse.DocumentBuild;
 
 
 
-
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class XmlParseUnitTest {	
-	Document doc;
-	String s ="IVANOV";
+	/*Document doc;
 	
-	/*@Before  
+	
+	@Before  
 	public  void setUpBeforeClass() {		
 		String ph ="/home/student/workspace003/BlackList/src/main/java/XmlParse/data.xml";
 		try
@@ -56,13 +54,12 @@ public class XmlParseUnitTest {
 	
 	
 	   @Test
-	      public  void test01stepThough() {
+	      public  void test01parseXML() {
 		 
-		  //  NodeList nodeList = doc.getElementsByTagName("Wholename");
-		  //  Node node = nodeList.item(0);		   
-		 	Sborka sb =new Sborka();
+		  	Sborka sb =new Sborka();
 		 	String[]s=new String[2];
-		     sb.main(s);      		    
+		    sb.main(s);  
+		 	
 		   String s1 ="AEROCARIBBEAN AIRLINES";
 		  Assert.assertEquals(s1,ResurseXml.mapvalue.get(0).get(1));
 	        
@@ -70,7 +67,7 @@ public class XmlParseUnitTest {
 	   }
 	
 	
-	   @Test
+	/*   @Test
 	      public void test02getNoTextElement() {
 
 		
@@ -80,7 +77,7 @@ public class XmlParseUnitTest {
 	      public void test03toSort() {
 	
 		
-	   }
+	   }*/
 	   
 	   
 	   
